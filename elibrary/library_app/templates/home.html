@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e-Library Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Light gray background */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #800000; /* Blood red */
+            margin-bottom: 20px;
+        }
+        .logo-placeholder {
+            width: 100px; /* Adjust the width as needed */
+            height: 100px; /* Adjust the height as needed */
+            margin: 0 auto;
+            background-color: #800000; /* Blood red */
+            display: block;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #800000; /* Blood red */
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #800000; /* Blood red */
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #a00000; /* Darker blood red */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        li {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        li strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #800000; /* Blood red */
+        }
+        li a {
+            color: #800000; /* Blood red */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        li a:hover {
+            color: #a00000; /* Darker blood red */
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the e-Library</h1>
+
+    <!-- Logo Placeholder -->
+    <div class="logo-placeholder">
+        <!-- Place logo here -->
+    </div>
+
+    <!-- Filter Form -->
+    <form method="get" action="{% url 'home' %}">
+        <label for="subject">Subject:</label>
+        <select name="subject" id="subject">
+            <option value="">All Subjects</option>
+            {% for code, subject in subjects %}
+            <option value="{{ code }}" {% if selected_subject == code %}selected{% endif %}>{{ subject }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="semester">Semester:</label>
+        <select name="semester" id="semester">
+            <option value="">All Semesters</option>
+            {% for num, semester in semesters %}
+            <option value="{{ num }}" {% if selected_semester == num|stringformat:"i" %}selected{% endif %}>{{ semester }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Display Filtered Study Materials -->
+    <ul>
+        {% if materials %}
+            {% for material in materials %}
+                <li>
+                    <strong>{{ material.title }}</strong> - {{ material.subject }} (Semester {{ material.semester }})<br>
+                    <a href="{{ material.file.url }}" download>Download</a>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>No materials found for the selected filters.</li>
+        {% endif %}
+    </ul>
+</body>
+</html>
+    
